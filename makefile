@@ -39,6 +39,11 @@ run-server-jar: jar
 run-exception: jar
 	${JAVA} -cp ${WORKSHOP_JAR} workshop6.ExceptionApp
 
+gt:
+	git add .
+	git commit -m "update"
+	git push origin main -u
+	
 clean:
 	@rm -rf ${OUT_DIR}
 	@rm -rf ${WORKSHOP_JAR}
