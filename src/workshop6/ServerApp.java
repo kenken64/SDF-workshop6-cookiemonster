@@ -29,20 +29,25 @@ public class ServerApp {
                 new ServerSocket(Integer.parseInt(serverPort))){
             init(cookieFile);
             while(true){
-                try(Socket client = server.accept()){
-                    System.out.println("ServerApp: client connected");
+                try(Socket client = server.accept();
                     InputStream is = client.getInputStream();
                     DataInputStream dis = new DataInputStream(is);
                     OutputStream os = client.getOutputStream();
-                    DataOutputStream dos = new DataOutputStream(os);
+                    DataOutputStream dos = new DataOutputStream(os)){
                     while(true){
                         String commandMessage = dis.readUTF();
                         System.out.println("ServerApp: message=" + commandMessage);
                         if(commandMessage.equals("exit")){
-                            break;
+                            System.exit(1);
                         }else if(commandMessage.equals("get-cookie")){
                             // call the cookie object and randomize
-                            String randomCookie = getRandomCookie();
+                            String randomCookie = "";
+                            try{
+                                randomCookie = getRandomCookie();
+                            } catch (NoCookieFoundException e) {
+                                System.err.println("ServerApp: NoCookieFoundException: " + e.getMessage());
+                            }
+                            
                             dos.writeUTF("cookie-text_"+ randomCookie);
                         }else{
                             dos.writeUTF("Invalid command");
@@ -50,7 +55,6 @@ public class ServerApp {
                     }
                 }
             }
-            
         }
     }
 }

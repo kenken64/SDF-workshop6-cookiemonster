@@ -36,6 +36,8 @@ run-client-jar: jar
 run-server-jar: jar
 	${JAVA} -cp ${WORKSHOP_JAR} ${SERVER_APP} ${PORT_NO} ${COOKIE_FILE_PATH}
 
+run-exception: jar
+	${JAVA} -cp ${WORKSHOP_JAR} workshop6.ExceptionApp
 
 clean:
 	@rm -rf ${OUT_DIR}

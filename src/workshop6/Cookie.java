@@ -15,7 +15,7 @@ public class Cookie {
         cookies = getDataFromTextFile(cookieFile);
     }
 
-    public static String getRandomCookie(){
+    public static String getRandomCookie() throws NoCookieFoundException{
         String randomCookie= "";
         if(cookies.size() > 0){
             Random rand = new Random();
@@ -24,6 +24,7 @@ public class Cookie {
 
         }else{
             System.out.println("Cookie: No cookie found");
+            throw new NoCookieFoundException("Cookie: No cookie found");
         }
         return randomCookie;
     }
