@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static workshop6.Cookie.getRandomCookie;
 import static workshop6.Cookie.init;
@@ -24,15 +26,17 @@ public class ServerApp {
         String serverPort = args[0];
         String cookieFile = args[1];
         System.out.println("ServerApp: serverPort=" + serverPort + ", cookieFile=" + cookieFile);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
 
         try (ServerSocket server = new ServerSocket(Integer.parseInt(serverPort))) {
             init(cookieFile);
             while (true) {
                 Socket client = server.accept();
                 ClientHandler clientHandler = new ClientHandler(client);
-                Thread thread = new Thread(clientHandler);
-                thread.start();
+                executor.submit(clientHandler);
             }
+        }finally{
+            executor.shutdown();
         }
     }
 }
